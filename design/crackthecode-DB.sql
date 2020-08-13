@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `CrackTheCodeDB`.`Game` (
   `gameId` INT NOT NULL,
   `guess` VARCHAR(4) NOT NULL,
   `answer` VARCHAR(4) NOT NULL,
-  `status` VARCHAR(45) NOT NULL,
+ `status` enum('in-Progress','finished') NOT NULL,
   PRIMARY KEY (`gameId`))
 ENGINE = InnoDB;
 
