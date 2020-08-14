@@ -15,33 +15,35 @@ CREATE SCHEMA IF NOT EXISTS `CrackTheCodeDB` DEFAULT CHARACTER SET utf8 ;
 USE `CrackTheCodeDB` ;
 
 -- -----------------------------------------------------
--- Table `CrackTheCodeDB`.`Round`
+-- Table `CrackTheCodeDB`.`game`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `CrackTheCodeDB`.`Round` (
-  `roundId` INT NOT NULL AUTO_INCREMENT,
-  `roundNumber` INT NOT NULL,
-  `guessTime` VARCHAR(45) NOT NULL,
-  `partial` INT NOT NULL,
-  `exact` INT NOT NULL,
-  `Game_gameId` INT NOT NULL,
-  PRIMARY KEY (`roundId`),
-  INDEX `fk_Round_Game_idx` (`Game_gameId` ASC) VISIBLE,
-  CONSTRAINT `fk_Round_Game`
-    FOREIGN KEY (`Game_gameId`)
-    REFERENCES `CrackTheCodeDB`.`Game` (`gameId`))
+CREATE TABLE IF NOT EXISTS `CrackTheCodeDB`.`game` (
+  `gameId` INT NOT NULL AUTO_INCREMENT,
+  `guess` VARCHAR(4) NULL,
+  `answer` VARCHAR(4) NOT NULL,
+  `status` ENUM('in-Progress', 'finished') NOT NULL,
+  PRIMARY KEY (`gameId`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `CrackTheCodeDB`.`game`
+-- Table `CrackTheCodeDB`.`round`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `CrackTheCodeDB`.`game` (
-  `gameId` INT NULL,
-  `guess` VARCHAR(4),
-  `answer` VARCHAR(4),
-  `status` ENUM('in-Progress', 'finished') NOT NULL,
-  PRIMARY KEY (`gameId`))
+CREATE TABLE IF NOT EXISTS `CrackTheCodeDB`.`round` (
+  `roundId` INT NOT NULL AUTO_INCREMENT,
+  `roundNumber` INT NOT NULL,
+  `guessTime` TIMESTAMP(6) NOT NULL,
+  `partial` INT NOT NULL,
+  `exact` INT NOT NULL,
+  `game_gameId` INT NOT NULL,
+  PRIMARY KEY (`roundId`),
+  INDEX `fk_Round_game_idx` (`game_gameId` ASC) VISIBLE,
+  CONSTRAINT `fk_Round_game`
+    FOREIGN KEY (`game_gameId`)
+    REFERENCES `CrackTheCodeDB`.`game` (`gameId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
