@@ -80,8 +80,6 @@ public class Controller {
             //calculate round
             GameResponse currentGame = service.calculatedResult(game);
 
-            System.out.println("currentGame " + currentGame);
-
             //null is returned if game was already finished
             if (currentGame == null) {
 
@@ -132,11 +130,8 @@ public class Controller {
         Game foundGame = service.getGame(gameId);
 
         if (foundGame != null) {
-
             response = new ResponseEntity(foundGame, HttpStatus.OK);
-
         }
-
         return response;
     }
 

@@ -26,15 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author louie
  */
 @Repository
-@Profile("database")
-public class GameDatabaseDao implements GameDao {
+@Profile("testing")
+public class GameDatabaseDaoImpl implements GameDao {
 
     @Autowired
     private JdbcTemplate jdbc;
 
     @Override
     @Transactional
-    public Game CreateGame(Game game) {
+    public Game createGame(Game game) {
 
         final String INSERT_GAME = "INSERT INTO game(answer, status) VALUES(?,?)";
 
@@ -81,6 +81,13 @@ public class GameDatabaseDao implements GameDao {
 
         jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId());
 
+    }
+
+    @Override
+    public void deleteGame(int id) {
+        final String DELETE_GAME = "DELETE FROM game "
+                + "WHERE gameId = ?";
+        jdbc.update(DELETE_GAME, id);
     }
 
     private static final class GameMapper implements RowMapper<Game> {

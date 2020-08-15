@@ -16,6 +16,8 @@ public interface RoundDao {
 
     void createRound(int roundNumber, int gameId);
 
+    void deleteGame(int id);
+
     Round getRound(int gameId);
 
     void addRound(Round round, int roundNumber, int gameId);

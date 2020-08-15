@@ -20,8 +20,8 @@ import org.springframework.stereotype.Repository;
  * @author louie
  */
 @Repository
-@Profile("database")
-public class RoundDatabaseDao implements RoundDao {
+@Profile("testing")
+public class RoundDatabaseDaoImpl implements RoundDao {
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -70,6 +70,13 @@ public class RoundDatabaseDao implements RoundDao {
 
         return jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new RoundMapper(), gameId);
 
+    }
+
+    @Override
+    public void deleteGame(int id) {
+        final String DELETE_ROUND = "DELETE FROM round "
+                + "WHERE game_gameId = ?";
+        jdbc.update(DELETE_ROUND, id);
     }
 
     private static final class RoundMapper implements RowMapper<Round> {

@@ -107,7 +107,7 @@ public class serviceLayerImp implements ServiceLayer {
     @Override
     public Game createGame(Game game) {
         //create game and save to db
-        Game createdGame = gameDb.CreateGame(game);
+        Game createdGame = gameDb.createGame(game);
         //create round with gameId
         roundDb.createRound(0, createdGame.getGameId());
         return createdGame;

@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
  */
 public class GameResponse {
 
-    int roundNumber;
-    int gameId;
-    String guess;
-    LocalDateTime time;
-    String Result;
-    String status;
-    String message;
+    private int roundNumber;
+    private int gameId;
+    private String guess;
+    private LocalDateTime time;
+    private String Result;
+    private String status;
+    private String message;
 
     public GameResponse(int roundNumber, int gameId, String guess, LocalDateTime time, String Result, String status, String message) {
         this.roundNumber = roundNumber;

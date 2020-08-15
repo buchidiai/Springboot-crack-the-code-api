@@ -15,7 +15,9 @@ import java.util.List;
  */
 public interface GameDao {
 
-    Game CreateGame(Game game);
+    Game createGame(Game game);
+
+    void deleteGame(int id);
 
     Game findGamebyId(int id);
 
