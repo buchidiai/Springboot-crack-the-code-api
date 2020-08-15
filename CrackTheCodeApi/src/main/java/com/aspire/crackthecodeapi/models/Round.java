@@ -14,27 +14,26 @@ import java.util.Objects;
  */
 public class Round implements Comparable<Round> {
 
-//    @JsonIgnore
     private int roundId;
     private int roundNumber;
     private int gameId;
     private String guess;
     private LocalDateTime time;
-//    @JsonIgnore
     private int exact;
-//    @JsonIgnore
     private int partial;
     private String Result;
     private String status;
 
-    public Round(int roundNumber, int gameId, String guess, LocalDateTime time) {
+    public Round() {
+    }
+
+    public Round(int roundNumber, int gameId, String guess, LocalDateTime time, String Result, String status) {
         this.roundNumber = roundNumber;
         this.gameId = gameId;
         this.guess = guess;
         this.time = time;
-    }
-
-    public Round() {
+        this.Result = Result;
+        this.status = status;
     }
 
     public int getRoundId() {
@@ -42,23 +41,8 @@ public class Round implements Comparable<Round> {
     }
 
     public void setRoundId(int roundId) {
+        System.out.println("i was set");
         this.roundId = roundId;
-    }
-
-    public int getExact() {
-        return exact;
-    }
-
-    public void setExact(int exact) {
-        this.exact = exact;
-    }
-
-    public int getPartial() {
-        return partial;
-    }
-
-    public void setPartial(int partial) {
-        this.partial = partial;
     }
 
     public int getRoundNumber() {
@@ -91,6 +75,22 @@ public class Round implements Comparable<Round> {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public int getExact() {
+        return exact;
+    }
+
+    public void setExact(int exact) {
+        this.exact = exact;
+    }
+
+    public int getPartial() {
+        return partial;
+    }
+
+    public void setPartial(int partial) {
+        this.partial = partial;
     }
 
     public String getResult() {
@@ -165,6 +165,11 @@ public class Round implements Comparable<Round> {
     @Override
     public int compareTo(Round o) {
         return this.time.compareTo(o.time);
+    }
+
+    @Override
+    public String toString() {
+        return "Round{" + "roundId=" + roundId + ", roundNumber=" + roundNumber + ", gameId=" + gameId + ", guess=" + guess + ", time=" + time + ", exact=" + exact + ", partial=" + partial + ", Result=" + Result + ", status=" + status + '}';
     }
 
 }

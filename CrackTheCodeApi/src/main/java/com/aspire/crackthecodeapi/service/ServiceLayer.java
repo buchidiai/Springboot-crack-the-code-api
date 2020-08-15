@@ -5,6 +5,7 @@
  */
 package com.aspire.crackthecodeapi.service;
 
+import com.aspire.crackthecodeapi.controller.GameResponse;
 import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.models.Round;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ServiceLayer {
 
     String generateAnswer();
 
-    Round calculatedResult(Game game);
+    GameResponse calculatedResult(Game game);
 
     Game createGame(Game game);
 

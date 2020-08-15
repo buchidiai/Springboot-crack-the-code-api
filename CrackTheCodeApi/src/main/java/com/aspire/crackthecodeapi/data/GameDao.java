@@ -19,7 +19,7 @@ public interface GameDao {
 
     Game findGamebyId(int id);
 
-    boolean updateGame(Game game, Round round);
+    void updateGame(Game game, Round round);
 
     List<Game> getAllGames();
 

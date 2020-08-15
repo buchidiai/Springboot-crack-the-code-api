@@ -27,12 +27,12 @@ public class RoundDatabaseDao implements RoundDao {
     private JdbcTemplate jdbc;
 
     @Override
-    public boolean createRound(int roundNumber, int gameId) {
+    public void createRound(int roundNumber, int gameId) {
         final String INSERT_ROUND = "INSERT INTO round (roundNumber, game_gameId) VALUES(?,?)";
 
-        return jdbc.update(INSERT_ROUND,
+        jdbc.update(INSERT_ROUND,
                 roundNumber,
-                gameId) > 0;
+                gameId);
     }
 
     @Override
@@ -55,11 +55,10 @@ public class RoundDatabaseDao implements RoundDao {
     }
 
     @Override
-    public boolean addRound(Round round, int roundNumber, int gameId) {
+    public void addRound(Round round, int roundNumber, int gameId) {
 
         final String ADD_ROUND = "INSERT INTO round (roundNumber,guessTime, partial, exact, game_gameId ) VALUES(?,?,?,?,?)  ";
-
-        return jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId) > 0;
+        jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId);
     }
 
     @Override
@@ -76,9 +75,10 @@ public class RoundDatabaseDao implements RoundDao {
         @Override
         public Round mapRow(ResultSet rs, int index) throws SQLException {
             Round round = new Round();
+            System.out.println("bout to set");
             round.setRoundId(rs.getInt("roundId"));
             round.setRoundNumber(rs.getInt("roundNumber"));
-            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime() != null ? rs.getTimestamp("guessTime").toLocalDateTime() : null);
+            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime() == null ? null : rs.getTimestamp("guessTime").toLocalDateTime());
             round.setPartial(rs.getInt("partial"));
             round.setExact(rs.getInt("exact"));
             round.setGameId(rs.getInt("game_gameId"));

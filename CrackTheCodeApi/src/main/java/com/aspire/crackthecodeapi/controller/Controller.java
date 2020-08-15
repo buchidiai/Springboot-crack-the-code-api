@@ -42,15 +42,12 @@ public class Controller {
         //generate answer
         String answer = service.generateAnswer();
 
-        //set status
-        final String status = "In-progress";
-
         //create new game object
         Game game = new Game();
         //set answer
         game.setAnswer(answer);
         //set status
-        game.setStatus(status);
+        game.setStatus(GAME_IN_PROGRESS);
 
         //create game
         Game createdGame = service.createGame(game);
@@ -58,9 +55,7 @@ public class Controller {
         //set object/response if not null
         if (createdGame != null) {
 
-            //create fake json object
-            String clientResponse = "{\n gameId: " + createdGame.getGameId() + ", \n"
-                    + " success: " + true + "\n}";
+            CreateResponse clientResponse = new CreateResponse(createdGame.getGameId(), "game successfully created");
             //set response to client
             response = new ResponseEntity(clientResponse, HttpStatus.CREATED);
         }
@@ -73,39 +68,38 @@ public class Controller {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
-        String clientResponse = "";
-
         //check check if values are unique or guess length or contains alphabet
         if (!(isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
 
-            clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
-                    + " Error: guess must be a 4 digit unique number. \n}";
+            Error error = new Error();
+            error.setMessage("guess must be a 4 digit unique number.");
 
-            response = new ResponseEntity(clientResponse, HttpStatus.OK);
+            response = new ResponseEntity(error, HttpStatus.OK);
         } else {
 
             //calculate round
-            Round currentRound = service.calculatedResult(game);
+            GameResponse currentGame = service.calculatedResult(game);
+
+            System.out.println("currentGame " + currentGame);
 
             //null is returned if game was already finished
-            if (currentRound == null) {
+            if (currentGame == null) {
 
-                //create fake json object
-                clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
-                        + " previouslyCompleted: true \n"
-                        + " message: create new game \n}";
+                Error error = new Error();
+                error.setGameId(game.getGameId());
+                error.setMessage("game has already been completed.");
 
-                response = new ResponseEntity(clientResponse, HttpStatus.OK);
+                response = new ResponseEntity(error, HttpStatus.OK);
                 //check if status has been set to finished and send result to client
-            } else if (currentRound.getStatus().equals(FINISHED_GAME)) {
+            } else if (currentGame.getStatus().equals(FINISHED_GAME)) {
                 //game was won
 
-                response = new ResponseEntity(currentRound, HttpStatus.OK);
+                response = new ResponseEntity(currentGame, HttpStatus.OK);
 
-            } else if (currentRound.getStatus().equals(GAME_IN_PROGRESS)) {
+            } else if (currentGame.getStatus().equals(GAME_IN_PROGRESS)) {
 
                 //lost try again
-                response = new ResponseEntity(currentRound, HttpStatus.OK);
+                response = new ResponseEntity(currentGame, HttpStatus.OK);
 
             }
 

@@ -76,13 +76,10 @@ public class GameDatabaseDao implements GameDao {
     }
 
     @Override
-    @Transactional
-    public boolean updateGame(Game game, Round round) {
+    public void updateGame(Game game, Round round) {
         final String UPDATE_GAME_TABLE = "UPDATE game SET guess = ?, status = ? WHERE gameId = ?";
 
-        boolean updateGameTable = jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId()) > 0;
-
-        return updateGameTable;
+        jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId());
 
     }
 

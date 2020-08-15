@@ -47,7 +47,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     public final ResponseEntity<Error> handleIncorrectSizeException(IncorrectResultSizeDataAccessException ex, WebRequest request) {
 
-        final String MESSAGE = "Incorrect size";
+        final String MESSAGE = "Something went wrong, please try again";
 
         Error err = new Error();
         err.setMessage(MESSAGE);

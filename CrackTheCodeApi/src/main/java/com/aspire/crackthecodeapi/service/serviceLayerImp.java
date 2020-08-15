@@ -5,6 +5,7 @@
  */
 package com.aspire.crackthecodeapi.service;
 
+import com.aspire.crackthecodeapi.controller.GameResponse;
 import com.aspire.crackthecodeapi.data.GameDao;
 import com.aspire.crackthecodeapi.data.RoundDao;
 import com.aspire.crackthecodeapi.models.Game;
@@ -120,21 +121,25 @@ public class serviceLayerImp implements ServiceLayer {
     }
 
     @Override
-    public Round calculatedResult(Game game) {
+    public GameResponse calculatedResult(Game game) {
 
+        //game found
         final Game existingGame = gameDb.findGamebyId(game.getGameId());
 
+        //user guess
         final String guess = game.getGuess();
 
+        //answer
         final String answer = existingGame.getAnswer();
 
-        System.out.println("here");
-
+        //getcurrent round played
         final int currentRound = roundDb.getRoundNumber(existingGame.getGameId());
 
+        //current round
         Round round = null;
 
-        System.out.println("2");
+        //client response
+        GameResponse response = null;
 
         //check if game is in progress so
         if (existingGame.getStatus().equals(GAME_IN_PROGRESS)) {
@@ -161,8 +166,11 @@ public class serviceLayerImp implements ServiceLayer {
                 //update round table
                 roundDb.addRound(round, currentRound + 1, game.getGameId());
 
+                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, now, "e:" + round.getExact() + ":p:" + round.getPartial(), GAME_FINISHED, "Congrats!! You Cracked the Code");
+
             } else {
 
+                //check which digits match
                 char[] answerArray = answer.toCharArray();
                 char[] guessArray = guess.toCharArray();
                 int ex = 0;
@@ -199,7 +207,6 @@ public class serviceLayerImp implements ServiceLayer {
                 }
 
                 round = new Round();
-
                 game.setStatus(GAME_IN_PROGRESS);
 
                 round.setGameId(game.getGameId());
@@ -217,11 +224,13 @@ public class serviceLayerImp implements ServiceLayer {
                 //update round table
                 roundDb.addRound(round, round.getRoundNumber(), game.getGameId());
 
+                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, now, "e:" + round.getExact() + ":p:" + round.getPartial(), GAME_IN_PROGRESS, "Try again! Code needs to be cracked ;)");
+
             }
 
         }
 
-        return round;
+        return round == null ? null : response;
 
     }
 

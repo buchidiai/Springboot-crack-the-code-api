@@ -14,11 +14,11 @@ import java.util.List;
  */
 public interface RoundDao {
 
-    boolean createRound(int roundNumber, int gameId);
+    void createRound(int roundNumber, int gameId);
 
     Round getRound(int gameId);
 
-    boolean addRound(Round round, int roundNumber, int gameId);
+    void addRound(Round round, int roundNumber, int gameId);
 
     int getRoundNumber(int gameId);
 

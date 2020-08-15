@@ -5,28 +5,26 @@
  */
 package com.aspire.crackthecodeapi.controller;
 
-import java.time.LocalDateTime;
-
 /**
  *
  * @author louie
  */
-public class Error {
+public class CreateResponse {
 
-    private LocalDateTime timestamp = LocalDateTime.now();
-    private String message;
-    private int gameId;
+    int gameId;
+    String message;
+
+    public CreateResponse(int gameId, String message) {
+        this.gameId = gameId;
+        this.message = message;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
 
     public void setGameId(int gameId) {
         this.gameId = gameId;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 
     public String getMessage() {
