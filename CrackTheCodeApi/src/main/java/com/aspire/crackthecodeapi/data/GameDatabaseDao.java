@@ -38,7 +38,6 @@ public class GameDatabaseDao implements GameDao {
 
         final String INSERT_GAME = "INSERT INTO game(answer, status) VALUES(?,?)";
 
-//        final String INSERT_ROUND = "INSERT INTO round (roundNumber, game_gameId) VALUES(?,?)";
         GeneratedKeyHolder newId = new GeneratedKeyHolder();
 
         jdbc.update((Connection conn) -> {
@@ -52,9 +51,6 @@ public class GameDatabaseDao implements GameDao {
 
         game.setGameId(newId.getKey().intValue());
 
-//        jdbc.update(INSERT_ROUND,
-//                1,
-//                newId.getKey().intValue());
         return game;
     }
 
@@ -77,28 +73,13 @@ public class GameDatabaseDao implements GameDao {
 
     @Override
     @Transactional
-    public boolean updateGameWin(Game game, Round round) {
+    public boolean updateGame(Game game, Round round) {
         final String UPDATE_GAME_TABLE = "UPDATE game SET guess = ?, status = ? WHERE gameId = ?";
 
         boolean updateGameTable = jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId()) > 0;
 
         return updateGameTable;
 
-    }
-
-    @Override
-    @Transactional
-    public boolean updateGameLoss(Game game, Round round) {
-
-        final String UPDATE_GAME_TABLE = "UPDATE game SET guess = ? WHERE gameId = ?";
-
-        boolean updateGameTable = jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getGameId()) > 0;
-
-        final String INSERT_ROUND_TABLE = "UPDATE round SET roundNumber = ? guessTime = ? , partial = ?, exact = ?";
-
-        boolean updateRoundTable = jdbc.update(INSERT_ROUND_TABLE, round.getRoundNumber(), round.getTime(), round.getPartial(), round.getExact()) > 0;
-
-        return updateGameTable && updateRoundTable;
     }
 
     private static final class GameMapper implements RowMapper<Game> {

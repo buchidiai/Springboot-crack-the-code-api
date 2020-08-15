@@ -118,11 +118,11 @@ public class serviceLayerImp implements ServiceLayer {
                 round.setExact(4);
                 round.setPartial(0);
                 round.setResult("e:" + round.getExact() + ":p:" + round.getPartial());
-                round.setRoundNumber(currentRound);
+                round.setRoundNumber(currentRound + 1);
                 round.setStatus(GAME_FINISHED);
 
                 //update game table /database
-                gameDb.updateGameWin(game, round);
+                gameDb.updateGame(game, round);
 
                 //update round table
                 roundDb.updateRound(round, currentRound + 1, game.getGameId());
@@ -178,10 +178,10 @@ public class serviceLayerImp implements ServiceLayer {
                 round.setStatus(GAME_IN_PROGRESS);
 
                 //update game table /database
-                gameDb.updateGameWin(game, round);
+                gameDb.updateGame(game, round);
 
                 //update round table
-                roundDb.updateRound(round, currentRound + 1, game.getGameId());
+                roundDb.updateRound(round, round.getRoundNumber(), game.getGameId());
 
             }
 

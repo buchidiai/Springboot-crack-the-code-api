@@ -72,10 +72,12 @@ public class Controller {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
+        String clientResponse = "";
+
         //check check if values are unique or guess length or contains alphabet
         if (!(isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
 
-            String clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
+            clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
                     + " Error: guess must be a 4 digit unique number. \n}";
 
             response = new ResponseEntity(clientResponse, HttpStatus.OK);
@@ -84,36 +86,34 @@ public class Controller {
             //calculate round
             Round currentRound = service.calculatedResult(game);
 
-            System.out.println("currentRound " + currentRound);
-
-            //null is returned if game is finished
+            //null is returned if game was already finished
             if (currentRound == null) {
-                System.out.println("1");
+
                 //create fake json object
-                String clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
-                        + " status: completed \n}";
+                clientResponse = "{\n gameId: " + game.getGameId() + ", \n"
+                        + " previouslyCompleted: true \n"
+                        + " message: create new game \n}";
 
                 response = new ResponseEntity(clientResponse, HttpStatus.OK);
                 //check if status has been set to finished and send result to client
             } else if (currentRound.getStatus().equals(FINISHED_GAME)) {
-                System.out.println("2");
+                //game was won
 
                 response = new ResponseEntity(currentRound, HttpStatus.OK);
 
             } else if (currentRound.getStatus().equals(GAME_IN_PROGRESS)) {
-                System.out.println("3");
+
+                //lost try again
                 response = new ResponseEntity(currentRound, HttpStatus.OK);
 
             }
-            System.out.println("5");
-        }
 
-        System.out.println("5");
+        }
 
         return response;
     }
 
-    public static boolean isUnique(String input) { // Create a Set to insert characters
+    private static boolean isUnique(String input) { // Create a Set to insert characters
         Set<Character> set = new HashSet<>();
         // get all characters form String
         char[] characters = input.toCharArray();

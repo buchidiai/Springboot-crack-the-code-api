@@ -19,9 +19,7 @@ public interface GameDao {
 
     Game findGamebyId(int id);
 
-    boolean updateGameWin(Game game, Round round);
-
-    boolean updateGameLoss(Game game, Round round);
+    boolean updateGame(Game game, Round round);
 
     List<Game> getAllGames();
 

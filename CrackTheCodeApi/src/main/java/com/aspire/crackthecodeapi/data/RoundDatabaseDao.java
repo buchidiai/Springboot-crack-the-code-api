@@ -6,10 +6,13 @@
 package com.aspire.crackthecodeapi.data;
 
 import com.aspire.crackthecodeapi.models.Round;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -51,6 +54,30 @@ public class RoundDatabaseDao implements RoundDao {
         final String UPDATE_ROUND = "UPDATE round SET roundNumber = ?,guessTime = ? , partial = ?, exact = ?   WHERE game_gameId = ?";
 
         return jdbc.update(UPDATE_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId) > 0;
+    }
+
+    @Override
+    public Round getRound(int gameId) {
+
+        final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round WHERE game_gameId = ?";
+
+        return jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new RoundMapper(), gameId);
+
+    }
+
+    private static final class RoundMapper implements RowMapper<Round> {
+
+        @Override
+        public Round mapRow(ResultSet rs, int index) throws SQLException {
+            Round round = new Round();
+            round.setRoundId(rs.getInt("roundId"));
+            round.setRoundNumber(rs.getInt("roundNumber"));
+            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime());
+            round.setPartial(rs.getInt("partial"));
+            round.setExact(rs.getInt("exact"));
+            round.setGameId(rs.getInt("game_gameId"));
+            return round;
+        }
     }
 
 }

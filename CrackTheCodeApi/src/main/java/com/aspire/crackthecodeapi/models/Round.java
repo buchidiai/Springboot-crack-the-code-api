@@ -5,6 +5,7 @@
  */
 package com.aspire.crackthecodeapi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -14,11 +15,15 @@ import java.util.Objects;
  */
 public class Round {
 
+    @JsonIgnore
+    private int roundId;
     private int roundNumber;
     private int gameId;
     private String guess;
     private LocalDateTime time;
+    @JsonIgnore
     private int exact;
+    @JsonIgnore
     private int partial;
     private String Result;
     private String status;
@@ -31,6 +36,14 @@ public class Round {
     }
 
     public Round() {
+    }
+
+    public int getRoundId() {
+        return roundId;
+    }
+
+    public void setRoundId(int roundId) {
+        this.roundId = roundId;
     }
 
     public int getExact() {

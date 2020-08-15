@@ -36,11 +36,20 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public final ResponseEntity<Error> handleResultNotFoundException(EmptyResultDataAccessException ex, WebRequest request) {
 
-        final String MESSAGE = "Item Not Found";
+        final String MESSAGE = "Game Not Found";
 
         Error err = new Error();
         err.setMessage(MESSAGE);
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
 
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public final ResponseEntity<Error> handleNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
+//
+//        final String MESSAGE = "Request not readable";
+//
+//        Error err = new Error();
+//        err.setMessage(MESSAGE);
+//        return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
+//    }
 }
