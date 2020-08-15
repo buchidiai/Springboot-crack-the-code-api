@@ -168,7 +168,7 @@ public class serviceLayerImp implements ServiceLayer {
                 round.setStatus(GAME_FINISHED);
 
                 //update game table /database
-                gameDb.updateGame(game, round);
+                gameDb.updateGame(game);
 
                 //update round table
                 roundDb.addRound(round, currentRound + 1, game.getGameId());
@@ -226,7 +226,7 @@ public class serviceLayerImp implements ServiceLayer {
                 round.setStatus(GAME_IN_PROGRESS);
 
                 //update game table /database
-                gameDb.updateGame(game, round);
+                gameDb.updateGame(game);
 
                 //update round table
                 roundDb.addRound(round, round.getRoundNumber(), game.getGameId());

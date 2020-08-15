@@ -9,6 +9,8 @@ import com.aspire.crackthecodeapi.TestApplicationConfiguration;
 import com.aspire.crackthecodeapi.models.Game;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +44,6 @@ public class GameDatabaseDaoImplTest {
 
     @Test
     public void testAddGame() {
-
-        System.out.println("here");
         //create new game object
         Game game = new Game();
         //set answer
@@ -56,4 +56,95 @@ public class GameDatabaseDaoImplTest {
         assertEquals(game, createdGame);
     }
 
+    @Test
+    public void testAddGameStatus() {
+        //create new game object
+        Game game = new Game();
+        //set answer
+        game.setAnswer("1234");
+        //set status
+        game.setStatus(GAME_IN_PROGRESS);
+
+        Game createdGame = gameDao.createGame(game);
+
+        assertEquals(game.getStatus(), createdGame.getStatus());
+    }
+
+    @Test
+    public void testGetAllGames() {
+        Game game = new Game();
+        game.setAnswer("1234");
+        game.setStatus(GAME_IN_PROGRESS);
+        Game createdGame = gameDao.createGame(game);
+
+        Game game1 = new Game();
+        game1.setAnswer("5678");
+        game1.setStatus(GAME_IN_PROGRESS);
+        Game createdGame1 = gameDao.createGame(game1);
+
+        List<Game> games = gameDao.getAllGames();
+
+        assertEquals(2, games.size());
+        assertTrue(games.contains(createdGame));
+        assertTrue(games.contains(createdGame1));
+    }
+
+    @Test
+    public void testfindGameById() {
+        Game game = new Game();
+        game.setAnswer("1234");
+        game.setStatus(GAME_IN_PROGRESS);
+        Game createdGame = gameDao.createGame(game);
+
+        List<Game> games = gameDao.getAllGames();
+
+        Game onlyGame = games.get(0);
+
+        Game retrievedGame = gameDao.findGamebyId(onlyGame.getGameId());
+
+        assertEquals(1, games.size());
+
+        assertTrue(onlyGame.getGameId() == createdGame.getGameId());
+
+        assertTrue(retrievedGame.getGameId() == createdGame.getGameId());
+    }
+
+    @Test
+    public void testupdateGame() {
+        Game game = new Game();
+        game.setAnswer("1234");
+        game.setStatus(GAME_IN_PROGRESS);
+
+        Game createdGame = gameDao.createGame(game);
+
+        //update game field
+        createdGame.setStatus(FINISHED_GAME);
+        createdGame.setGuess("1234");
+
+        //save to db
+        gameDao.updateGame(createdGame);
+
+        Game updatedGame = gameDao.findGamebyId(createdGame.getGameId());
+
+        assertEquals(createdGame.getStatus(), updatedGame.getStatus());
+        assertNotNull(updatedGame.getAnswer());
+
+    }
+
+    @Test
+    public void testDeleteGame() {
+        Game game = new Game();
+        game.setAnswer("1234");
+        game.setStatus(GAME_IN_PROGRESS);
+
+        Game createdGame = gameDao.createGame(game);
+
+        gameDao.deleteGame(createdGame.getGameId());
+
+        List<Game> games = gameDao.getAllGames();
+
+        assertEquals(0, games.size());
+        assertTrue(!games.contains(createdGame));
+
+    }
 }

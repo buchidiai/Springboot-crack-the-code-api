@@ -6,7 +6,6 @@
 package com.aspire.crackthecodeapi.data;
 
 import com.aspire.crackthecodeapi.models.Game;
-import com.aspire.crackthecodeapi.models.Round;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ public interface GameDao {
 
     Game findGamebyId(int id);
 
-    void updateGame(Game game, Round round);
+    void updateGame(Game game);
 
     List<Game> getAllGames();
 

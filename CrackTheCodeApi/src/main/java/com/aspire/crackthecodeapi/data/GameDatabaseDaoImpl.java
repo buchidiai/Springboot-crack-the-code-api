@@ -6,7 +6,6 @@
 package com.aspire.crackthecodeapi.data;
 
 import com.aspire.crackthecodeapi.models.Game;
-import com.aspire.crackthecodeapi.models.Round;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,7 +75,7 @@ public class GameDatabaseDaoImpl implements GameDao {
     }
 
     @Override
-    public void updateGame(Game game, Round round) {
+    public void updateGame(Game game) {
         final String UPDATE_GAME_TABLE = "UPDATE game SET guess = ?, status = ? WHERE gameId = ?";
 
         jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId());
