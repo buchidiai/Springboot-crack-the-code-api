@@ -38,22 +38,28 @@ public class RoundDatabaseDao implements RoundDao {
     @Override
     public int getRoundNumber(int gameId) {
 
-        final String SELECT_FROM_ROUND_TABLE = "SELECT roundNumber FROM round WHERE game_gameId = ?";
+        final String SELECT_FROM_ROUND_TABLE = "SELECT MAX(RoundNumber) FROM round WHERE game_gameId = ?";
 
-        return jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new Object[]{gameId}, Integer.class);
+        int maxRound = jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new Object[]{gameId}, Integer.class);
+
+        return maxRound;
     }
 
     @Override
     public List<Round> getAllRoundsByGame(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round WHERE game_gameId = ?";
+
+        return jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper(), id);
+
     }
 
     @Override
-    public boolean updateRound(Round round, int roundNumber, int gameId) {
+    public boolean addRound(Round round, int roundNumber, int gameId) {
 
-        final String UPDATE_ROUND = "UPDATE round SET roundNumber = ?,guessTime = ? , partial = ?, exact = ?   WHERE game_gameId = ?";
+        final String ADD_ROUND = "INSERT INTO round (roundNumber,guessTime, partial, exact, game_gameId ) VALUES(?,?,?,?,?)  ";
 
-        return jdbc.update(UPDATE_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId) > 0;
+        return jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId) > 0;
     }
 
     @Override
@@ -72,12 +78,13 @@ public class RoundDatabaseDao implements RoundDao {
             Round round = new Round();
             round.setRoundId(rs.getInt("roundId"));
             round.setRoundNumber(rs.getInt("roundNumber"));
-            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime());
+            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime() != null ? rs.getTimestamp("guessTime").toLocalDateTime() : null);
             round.setPartial(rs.getInt("partial"));
             round.setExact(rs.getInt("exact"));
             round.setGameId(rs.getInt("game_gameId"));
             return round;
         }
+
     }
 
 }

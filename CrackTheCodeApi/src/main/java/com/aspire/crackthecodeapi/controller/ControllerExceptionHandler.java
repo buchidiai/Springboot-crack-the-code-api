@@ -7,6 +7,7 @@ package com.aspire.crackthecodeapi.controller;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -43,13 +44,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    public final ResponseEntity<Error> handleNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
-//
-//        final String MESSAGE = "Request not readable";
-//
-//        Error err = new Error();
-//        err.setMessage(MESSAGE);
-//        return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
-//    }
+    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+    public final ResponseEntity<Error> handleIncorrectSizeException(IncorrectResultSizeDataAccessException ex, WebRequest request) {
+
+        final String MESSAGE = "Incorrect size";
+
+        Error err = new Error();
+        err.setMessage(MESSAGE);
+        return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
+    }
 }

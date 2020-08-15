@@ -18,7 +18,7 @@ public interface RoundDao {
 
     Round getRound(int gameId);
 
-    boolean updateRound(Round round, int roundNumber, int gameId);
+    boolean addRound(Round round, int roundNumber, int gameId);
 
     int getRoundNumber(int gameId);
 

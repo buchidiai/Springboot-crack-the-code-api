@@ -68,7 +68,11 @@ public class GameDatabaseDao implements GameDao {
 
     @Override
     public List<Game> getAllGames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        final String GET_ALL_GAMES = "SELECT g.gameId, g.guess, g.answer, g.status FROM game g;";
+
+        return jdbc.query(GET_ALL_GAMES, new GameMapper());
+
     }
 
     @Override

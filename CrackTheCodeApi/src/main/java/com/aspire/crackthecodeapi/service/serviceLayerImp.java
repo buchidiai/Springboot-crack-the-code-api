@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class serviceLayerImp implements ServiceLayer {
 
     private static final String GAME_IN_PROGRESS = "in-Progress";
     private static final String GAME_FINISHED = "finished";
+    private static final LocalDateTime now = LocalDateTime.now();
 
     @Override
     public String generateAnswer() {
@@ -69,12 +71,29 @@ public class serviceLayerImp implements ServiceLayer {
 
     @Override
     public List<Game> getAllGames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        List<Game> games = gameDb.getAllGames();
+
+        for (Game g : games) {
+
+            if (g.getStatus().equals(GAME_IN_PROGRESS)) {
+                g.setAnswer("N/A");
+
+            }
+
+        }
+
+        return games;
     }
 
     @Override
     public List<Round> getAllRoundsByGame(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        List<Round> rounds = roundDb.getAllRoundsByGame(id);
+
+        List<Round> sortedRounds = rounds.stream().sorted().collect(Collectors.toList());
+
+        return sortedRounds;
     }
 
     @Override
@@ -88,6 +107,19 @@ public class serviceLayerImp implements ServiceLayer {
     }
 
     @Override
+    public Game getGame(int gameId) {
+
+        Game g = gameDb.findGamebyId(gameId);
+
+        if (g.getStatus().equals(GAME_IN_PROGRESS)) {
+            g.setAnswer("N/A");
+
+        }
+
+        return g;
+    }
+
+    @Override
     public Round calculatedResult(Game game) {
 
         final Game existingGame = gameDb.findGamebyId(game.getGameId());
@@ -96,11 +128,13 @@ public class serviceLayerImp implements ServiceLayer {
 
         final String answer = existingGame.getAnswer();
 
-        final LocalDateTime now = LocalDateTime.now();
+        System.out.println("here");
 
         final int currentRound = roundDb.getRoundNumber(existingGame.getGameId());
 
         Round round = null;
+
+        System.out.println("2");
 
         //check if game is in progress so
         if (existingGame.getStatus().equals(GAME_IN_PROGRESS)) {
@@ -125,7 +159,7 @@ public class serviceLayerImp implements ServiceLayer {
                 gameDb.updateGame(game, round);
 
                 //update round table
-                roundDb.updateRound(round, currentRound + 1, game.getGameId());
+                roundDb.addRound(round, currentRound + 1, game.getGameId());
 
             } else {
 
@@ -181,7 +215,7 @@ public class serviceLayerImp implements ServiceLayer {
                 gameDb.updateGame(game, round);
 
                 //update round table
-                roundDb.updateRound(round, round.getRoundNumber(), game.getGameId());
+                roundDb.addRound(round, round.getRoundNumber(), game.getGameId());
 
             }
 

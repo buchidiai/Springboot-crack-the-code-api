@@ -9,10 +9,12 @@ import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.models.Round;
 import com.aspire.crackthecodeapi.service.ServiceLayer;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +35,6 @@ public class Controller {
     private static final String FINISHED_GAME = "finished";
 
     @RequestMapping(value = "/begin", method = RequestMethod.POST)
-
     public ResponseEntity createGame() {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
@@ -107,6 +108,54 @@ public class Controller {
                 response = new ResponseEntity(currentRound, HttpStatus.OK);
 
             }
+
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/game", method = RequestMethod.GET)
+    public ResponseEntity<Round> getAllGames() {
+
+        ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
+
+        List<Game> allGames = service.getAllGames();
+
+        if (allGames != null) {
+
+            response = new ResponseEntity(allGames, HttpStatus.OK);
+
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/game/{gameId}", method = RequestMethod.GET)
+    public ResponseEntity<Round> getGame(@PathVariable int gameId) {
+
+        ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
+
+        Game foundGame = service.getGame(gameId);
+
+        if (foundGame != null) {
+
+            response = new ResponseEntity(foundGame, HttpStatus.OK);
+
+        }
+
+        return response;
+    }
+
+    @RequestMapping(value = "/rounds/{gameId}", method = RequestMethod.GET)
+    public ResponseEntity<Round> getAllrounds(@PathVariable int gameId) {
+
+        ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
+
+        List<Round> allRounds = service.getAllRoundsByGame(gameId);
+
+        if (allRounds != null) {
+
+            response = new ResponseEntity(allRounds, HttpStatus.OK);
 
         }
 

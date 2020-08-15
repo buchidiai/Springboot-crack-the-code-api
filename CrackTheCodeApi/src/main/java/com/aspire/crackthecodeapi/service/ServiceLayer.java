@@ -21,6 +21,8 @@ public interface ServiceLayer {
 
     Game createGame(Game game);
 
+    Game getGame(int gameId);
+
     Game findGamebyId(int id);
 
     List<Game> getAllGames();

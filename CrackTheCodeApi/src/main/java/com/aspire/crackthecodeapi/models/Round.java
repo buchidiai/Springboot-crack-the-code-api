@@ -5,7 +5,6 @@
  */
 package com.aspire.crackthecodeapi.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -13,17 +12,17 @@ import java.util.Objects;
  *
  * @author louie
  */
-public class Round {
+public class Round implements Comparable<Round> {
 
-    @JsonIgnore
+//    @JsonIgnore
     private int roundId;
     private int roundNumber;
     private int gameId;
     private String guess;
     private LocalDateTime time;
-    @JsonIgnore
+//    @JsonIgnore
     private int exact;
-    @JsonIgnore
+//    @JsonIgnore
     private int partial;
     private String Result;
     private String status;
@@ -161,6 +160,11 @@ public class Round {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Round o) {
+        return this.time.compareTo(o.time);
     }
 
 }
