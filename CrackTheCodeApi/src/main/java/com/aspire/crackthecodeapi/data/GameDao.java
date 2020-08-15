@@ -13,14 +13,16 @@ import java.util.List;
  *
  * @author louie
  */
-public interface Dao {
+public interface GameDao {
 
     Game CreateGame(Game game);
 
     Game findGamebyId(int id);
 
-    List<Game> getAllGames();
+    boolean updateGameWin(Game game, Round round);
 
-    List<Round> getAllRoundsByGame(int id);
+    boolean updateGameLoss(Game game, Round round);
+
+    List<Game> getAllGames();
 
 }

@@ -5,6 +5,7 @@
  */
 package com.aspire.crackthecodeapi.models;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -13,27 +14,46 @@ import java.util.Objects;
  */
 public class Round {
 
-    private String roundNumber;
+    private int roundNumber;
     private int gameId;
     private String guess;
-    private String time;
-    private String partial;
-    private String exact;
+    private LocalDateTime time;
+    private int exact;
+    private int partial;
+    private String Result;
+    private String status;
 
-    public Round(String roundNumber, int gameId, String guess, String time, String partial, String exact) {
+    public Round(int roundNumber, int gameId, String guess, LocalDateTime time) {
         this.roundNumber = roundNumber;
         this.gameId = gameId;
         this.guess = guess;
         this.time = time;
-        this.partial = partial;
+    }
+
+    public Round() {
+    }
+
+    public int getExact() {
+        return exact;
+    }
+
+    public void setExact(int exact) {
         this.exact = exact;
     }
 
-    public String getRoundNumber() {
+    public int getPartial() {
+        return partial;
+    }
+
+    public void setPartial(int partial) {
+        this.partial = partial;
+    }
+
+    public int getRoundNumber() {
         return roundNumber;
     }
 
-    public void setRoundNumber(String roundNumber) {
+    public void setRoundNumber(int roundNumber) {
         this.roundNumber = roundNumber;
     }
 
@@ -53,39 +73,41 @@ public class Round {
         this.guess = guess;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
-    public String getPartial() {
-        return partial;
+    public String getResult() {
+        return Result;
     }
 
-    public void setPartial(String partial) {
-        this.partial = partial;
+    public void setResult(String Result) {
+        this.Result = Result;
     }
 
-    public String getExact() {
-        return exact;
+    public String getStatus() {
+        return status;
     }
 
-    public void setExact(String exact) {
-        this.exact = exact;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.roundNumber);
-        hash = 37 * hash + this.gameId;
-        hash = 37 * hash + Objects.hashCode(this.guess);
-        hash = 37 * hash + Objects.hashCode(this.time);
-        hash = 37 * hash + Objects.hashCode(this.partial);
-        hash = 37 * hash + Objects.hashCode(this.exact);
+        int hash = 5;
+        hash = 19 * hash + this.roundNumber;
+        hash = 19 * hash + this.gameId;
+        hash = 19 * hash + Objects.hashCode(this.guess);
+        hash = 19 * hash + Objects.hashCode(this.time);
+        hash = 19 * hash + this.exact;
+        hash = 19 * hash + this.partial;
+        hash = 19 * hash + Objects.hashCode(this.Result);
+        hash = 19 * hash + Objects.hashCode(this.status);
         return hash;
     }
 
@@ -101,10 +123,16 @@ public class Round {
             return false;
         }
         final Round other = (Round) obj;
+        if (this.roundNumber != other.roundNumber) {
+            return false;
+        }
         if (this.gameId != other.gameId) {
             return false;
         }
-        if (!Objects.equals(this.roundNumber, other.roundNumber)) {
+        if (this.exact != other.exact) {
+            return false;
+        }
+        if (this.partial != other.partial) {
             return false;
         }
         if (!Objects.equals(this.guess, other.guess)) {
@@ -113,10 +141,10 @@ public class Round {
         if (!Objects.equals(this.time, other.time)) {
             return false;
         }
-        if (!Objects.equals(this.partial, other.partial)) {
+        if (!Objects.equals(this.Result, other.Result)) {
             return false;
         }
-        if (!Objects.equals(this.exact, other.exact)) {
+        if (!Objects.equals(this.status, other.status)) {
             return false;
         }
         return true;
