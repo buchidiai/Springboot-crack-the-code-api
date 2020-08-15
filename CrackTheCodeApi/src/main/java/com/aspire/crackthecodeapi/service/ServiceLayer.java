@@ -6,8 +6,8 @@
 package com.aspire.crackthecodeapi.service;
 
 import com.aspire.crackthecodeapi.controller.GameResponse;
+import com.aspire.crackthecodeapi.controller.RoundResponse;
 import com.aspire.crackthecodeapi.models.Game;
-import com.aspire.crackthecodeapi.models.Round;
 import java.util.List;
 
 /**
@@ -28,6 +28,6 @@ public interface ServiceLayer {
 
     List<Game> getAllGames();
 
-    List<Round> getAllRoundsByGame(int id);
+    List<RoundResponse> getAllRoundsByGame(int id);
 
 }

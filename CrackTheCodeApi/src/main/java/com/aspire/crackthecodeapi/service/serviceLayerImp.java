@@ -6,6 +6,7 @@
 package com.aspire.crackthecodeapi.service;
 
 import com.aspire.crackthecodeapi.controller.GameResponse;
+import com.aspire.crackthecodeapi.controller.RoundResponse;
 import com.aspire.crackthecodeapi.data.GameDao;
 import com.aspire.crackthecodeapi.data.RoundDao;
 import com.aspire.crackthecodeapi.models.Game;
@@ -42,7 +43,7 @@ public class serviceLayerImp implements ServiceLayer {
 
         String answer = "";
 
-        ArrayList<Integer> list = new ArrayList<Integer>(size);
+        ArrayList<Integer> list = new ArrayList<>(size);
         for (int i = 0; i <= size; i++) {
             list.add(i);
         }
@@ -75,26 +76,32 @@ public class serviceLayerImp implements ServiceLayer {
 
         List<Game> games = gameDb.getAllGames();
 
-        for (Game g : games) {
-
-            if (g.getStatus().equals(GAME_IN_PROGRESS)) {
-                g.setAnswer("N/A");
-
-            }
-
-        }
+        games.stream().filter(g -> (g.getStatus().equals(GAME_IN_PROGRESS))).forEachOrdered(g -> {
+            g.setAnswer("N/A");
+        });
 
         return games;
     }
 
     @Override
-    public List<Round> getAllRoundsByGame(int id) {
+    public List<RoundResponse> getAllRoundsByGame(int id) {
 
         List<Round> rounds = roundDb.getAllRoundsByGame(id);
 
         List<Round> sortedRounds = rounds.stream().sorted().collect(Collectors.toList());
 
-        return sortedRounds;
+        List<RoundResponse> cleanedUpRound = new ArrayList();
+
+        if (!rounds.isEmpty()) {
+            sortedRounds.stream().map(r -> {
+                return r;
+            }).map(r -> new RoundResponse(r.getRoundId(), r.getRoundNumber(), r.getGameId(), r.getTime(), "e:" + r.getExact() + ":p:" + r.getPartial())).forEachOrdered(roundresponse -> {
+                cleanedUpRound.add(roundresponse);
+            });
+
+        }
+
+        return cleanedUpRound;
     }
 
     @Override

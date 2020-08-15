@@ -41,7 +41,7 @@ public class Round implements Comparable<Round> {
     }
 
     public void setRoundId(int roundId) {
-        System.out.println("i was set");
+
         this.roundId = roundId;
     }
 
@@ -74,7 +74,10 @@ public class Round implements Comparable<Round> {
     }
 
     public void setTime(LocalDateTime time) {
-        this.time = time;
+
+        System.out.println("time " + time);
+
+        this.time = time == null ? null : time;
     }
 
     public int getExact() {
@@ -164,6 +167,11 @@ public class Round implements Comparable<Round> {
 
     @Override
     public int compareTo(Round o) {
+
+        if (o.time == null) {
+            return 1;
+        }
+
         return this.time.compareTo(o.time);
     }
 

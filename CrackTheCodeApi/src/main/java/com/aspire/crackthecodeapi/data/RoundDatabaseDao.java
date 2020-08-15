@@ -50,14 +50,16 @@ public class RoundDatabaseDao implements RoundDao {
 
         final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round WHERE game_gameId = ?";
 
-        return jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper(), id);
+        List<Round> roundsByGameId = jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper(), id);
+
+        return roundsByGameId;
 
     }
 
     @Override
     public void addRound(Round round, int roundNumber, int gameId) {
 
-        final String ADD_ROUND = "INSERT INTO round (roundNumber,guessTime, partial, exact, game_gameId ) VALUES(?,?,?,?,?)  ";
+        final String ADD_ROUND = "INSERT INTO round (roundNumber,guessTime, partial, exact, game_gameId ) VALUES(?,?,?,?,?);";
         jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId);
     }
 
@@ -75,10 +77,9 @@ public class RoundDatabaseDao implements RoundDao {
         @Override
         public Round mapRow(ResultSet rs, int index) throws SQLException {
             Round round = new Round();
-            System.out.println("bout to set");
             round.setRoundId(rs.getInt("roundId"));
             round.setRoundNumber(rs.getInt("roundNumber"));
-            round.setTime(rs.getTimestamp("guessTime").toLocalDateTime() == null ? null : rs.getTimestamp("guessTime").toLocalDateTime());
+            round.setTime(rs.getTimestamp("guessTime") == null ? null : rs.getTimestamp("guessTime").toLocalDateTime());
             round.setPartial(rs.getInt("partial"));
             round.setExact(rs.getInt("exact"));
             round.setGameId(rs.getInt("game_gameId"));

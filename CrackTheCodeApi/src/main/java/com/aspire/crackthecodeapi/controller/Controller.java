@@ -145,7 +145,7 @@ public class Controller {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
-        List<Round> allRounds = service.getAllRoundsByGame(gameId);
+        List<RoundResponse> allRounds = service.getAllRoundsByGame(gameId);
 
         if (allRounds != null) {
 
