@@ -11,7 +11,7 @@ import com.aspire.crackthecodeapi.data.GameDao;
 import com.aspire.crackthecodeapi.data.RoundDao;
 import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.models.Round;
-import java.time.LocalDateTime;
+import com.aspire.crackthecodeapi.service.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,10 +31,6 @@ public class serviceLayerImp implements ServiceLayer {
 
     @Autowired
     private RoundDao roundDb;
-
-    private static final String GAME_IN_PROGRESS = "in-Progress";
-    private static final String GAME_FINISHED = "finished";
-    private static final LocalDateTime now = LocalDateTime.now();
 
     @Override
     public String generateAnswer() {
@@ -68,6 +64,8 @@ public class serviceLayerImp implements ServiceLayer {
     @Override
     public Game findGamebyId(int id) {
 
+        System.out.println("in here w id " + id);
+
         return gameDb.findGameByGameId(id);
     }
 
@@ -76,7 +74,7 @@ public class serviceLayerImp implements ServiceLayer {
 
         List<Game> games = gameDb.getAllGames();
 
-        games.stream().filter(g -> (g.getStatus().equals(GAME_IN_PROGRESS))).forEachOrdered(g -> {
+        games.stream().filter(g -> (g.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS()))).forEachOrdered(g -> {
             g.setAnswer("N/A");
         });
 
@@ -119,7 +117,7 @@ public class serviceLayerImp implements ServiceLayer {
 
         Game g = gameDb.findGameByGameId(gameId);
 
-        if (g.getStatus().equals(GAME_IN_PROGRESS)) {
+        if (g.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS())) {
             g.setAnswer("N/A");
 
         }
@@ -142,6 +140,8 @@ public class serviceLayerImp implements ServiceLayer {
         //getcurrent round played
         final int currentRound = roundDb.getRoundNumberByGameId(existingGame.getGameId());
 
+        boolean updatedGame = false;
+
         //current round
         Round round = null;
 
@@ -149,31 +149,31 @@ public class serviceLayerImp implements ServiceLayer {
         GameResponse response = null;
 
         //check if game is in progress so
-        if (existingGame.getStatus().equals(GAME_IN_PROGRESS)) {
+        if (existingGame.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS())) {
 
             //all digits match
             if (answer.equals(guess)) {
 
                 round = new Round();
 
-                game.setStatus(GAME_FINISHED);
+                game.setStatus(Util.getGAME_STATUS_FINISHED());
 
                 round.setGameId(game.getGameId());
                 round.setGuess(guess);
-                round.setTime(now);
+                round.setTime(Util.getDATE_TIME());
                 round.setExact(4);
                 round.setPartial(0);
                 round.setResult("e:" + round.getExact() + ":p:" + round.getPartial());
                 round.setRoundNumber(currentRound + 1);
-                round.setStatus(GAME_FINISHED);
+                round.setStatus(Util.getGAME_STATUS_FINISHED());
 
                 //update game table /database
-                gameDb.updateGame(game);
+                updatedGame = gameDb.updateGame(game);
 
                 //update round table
                 roundDb.addRound(round, currentRound + 1, game.getGameId());
 
-                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, now, "e:" + round.getExact() + ":p:" + round.getPartial(), GAME_FINISHED, "Congrats!! You Cracked the Code");
+                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, round.getTime(), "e:" + round.getExact() + ":p:" + round.getPartial(), Util.getGAME_STATUS_FINISHED(), "Congrats!! You Cracked the Code");
 
             } else {
 
@@ -214,30 +214,30 @@ public class serviceLayerImp implements ServiceLayer {
                 }
 
                 round = new Round();
-                game.setStatus(GAME_IN_PROGRESS);
+                game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
                 round.setGameId(game.getGameId());
                 round.setGuess(guess);
-                round.setTime(now);
+                round.setTime(Util.getDATE_TIME());
                 round.setExact(ex);
                 round.setPartial(p);
                 round.setResult("e:" + ex + ":p:" + p);
                 round.setRoundNumber(currentRound + 1);
-                round.setStatus(GAME_IN_PROGRESS);
+                round.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
                 //update game table /database
-                gameDb.updateGame(game);
+                updatedGame = gameDb.updateGame(game);
 
                 //update round table
                 roundDb.addRound(round, round.getRoundNumber(), game.getGameId());
 
-                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, now, "e:" + round.getExact() + ":p:" + round.getPartial(), GAME_IN_PROGRESS, "Try again! Code needs to be cracked ;)");
+                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, round.getTime(), "e:" + round.getExact() + ":p:" + round.getPartial(), Util.getGAME_STATUS_IN_PROGRESS(), "Try again! Code needs to be cracked ;)");
 
             }
 
         }
 
-        return round == null ? null : response;
+        return round == null ? null : updatedGame == true ? response : null;
 
     }
 

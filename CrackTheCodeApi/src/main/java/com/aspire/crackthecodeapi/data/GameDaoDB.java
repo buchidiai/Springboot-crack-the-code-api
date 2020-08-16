@@ -24,8 +24,8 @@ import org.springframework.stereotype.Repository;
  * @author louie
  */
 @Repository
-@Profile("testing")
-public class GameDatabaseDaoImpl implements GameDao {
+@Profile("database")
+public class GameDaoDB implements GameDao {
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -52,12 +52,12 @@ public class GameDatabaseDaoImpl implements GameDao {
     }
 
     @Override
-    public Game findGameByGameId(int id) {
+    public Game findGameByGameId(int gameId) {
 
         final String GET_GAME_BY_ID = "SELECT gameId,guess,answer,status "
                 + "FROM game WHERE gameId = ?;";
 
-        Game foundGame = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), id);
+        Game foundGame = jdbc.queryForObject(GET_GAME_BY_ID, new GameMapper(), gameId);
 
         return foundGame;
 
@@ -73,18 +73,18 @@ public class GameDatabaseDaoImpl implements GameDao {
     }
 
     @Override
-    public void updateGame(Game game) {
+    public boolean updateGame(Game game) {
         final String UPDATE_GAME_TABLE = "UPDATE game SET guess = ?, status = ? WHERE gameId = ?";
 
-        jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId());
+        return jdbc.update(UPDATE_GAME_TABLE, game.getGuess(), game.getStatus(), game.getGameId()) > 0;
 
     }
 
     @Override
-    public void deleteGameByGameId(int id) {
+    public boolean deleteGameByGameId(int gameId) {
         final String DELETE_GAME = "DELETE FROM game "
                 + "WHERE gameId = ?";
-        jdbc.update(DELETE_GAME, id);
+        return jdbc.update(DELETE_GAME, gameId) > 0;
     }
 
     private static final class GameMapper implements RowMapper<Game> {

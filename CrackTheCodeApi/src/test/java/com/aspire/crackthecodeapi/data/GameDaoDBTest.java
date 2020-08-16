@@ -8,6 +8,7 @@ package com.aspire.crackthecodeapi.data;
 import com.aspire.crackthecodeapi.TestApplicationConfiguration;
 import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.models.Round;
+import com.aspire.crackthecodeapi.service.util.Util;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,16 +26,13 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
-public class GameDatabaseDaoImplTest {
+public class GameDaoDBTest {
 
     @Autowired
     GameDao gameDao;
 
     @Autowired
     RoundDao roundDao;
-
-    private static final String GAME_IN_PROGRESS = "in-Progress";
-    private static final String FINISHED_GAME = "finished";
 
     @Before
     public void setUp() {
@@ -59,7 +57,7 @@ public class GameDatabaseDaoImplTest {
         //set answer
         game.setAnswer("1234");
         //set status
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
         Game createdGame = gameDao.createGame(game);
 
@@ -73,7 +71,7 @@ public class GameDatabaseDaoImplTest {
         //set answer
         game.setAnswer("1234");
         //set status
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
         Game createdGame = gameDao.createGame(game);
 
@@ -87,7 +85,7 @@ public class GameDatabaseDaoImplTest {
         //set answer
         game.setAnswer("1234");
         //set status
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
         Game createdGame = gameDao.createGame(game);
 
@@ -99,13 +97,13 @@ public class GameDatabaseDaoImplTest {
         //create new game object
         Game game = new Game();
         game.setAnswer("1234");
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
         Game createdGame = gameDao.createGame(game);
 
         //create new game object
         Game game1 = new Game();
         game1.setAnswer("5678");
-        game1.setStatus(GAME_IN_PROGRESS);
+        game1.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
         Game createdGame1 = gameDao.createGame(game1);
 
         //get all games
@@ -121,7 +119,7 @@ public class GameDatabaseDaoImplTest {
         //create new game object
         Game game = new Game();
         game.setAnswer("1234");
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
         Game createdGame = gameDao.createGame(game);
         //get all games
         List<Game> games = gameDao.getAllGames();
@@ -145,12 +143,12 @@ public class GameDatabaseDaoImplTest {
         //create new game object
         Game game = new Game();
         game.setAnswer("1234");
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
         //create game
         Game createdGame = gameDao.createGame(game);
 
         //update game field
-        createdGame.setStatus(FINISHED_GAME);
+        createdGame.setStatus(Util.getGAME_STATUS_FINISHED());
         createdGame.setGuess("1234");
 
         //save to db
@@ -167,7 +165,7 @@ public class GameDatabaseDaoImplTest {
     public void testDeleteGame() {
         Game game = new Game();
         game.setAnswer("1234");
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
         Game createdGame = gameDao.createGame(game);
 

@@ -16,11 +16,11 @@ public interface GameDao {
 
     Game createGame(Game game);
 
-    void deleteGameByGameId(int id);
+    boolean deleteGameByGameId(int gameId);
 
-    Game findGameByGameId(int id);
+    Game findGameByGameId(int gameId);
 
-    void updateGame(Game game);
+    boolean updateGame(Game game);
 
     List<Game> getAllGames();
 

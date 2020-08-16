@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
-public class RoundDatabaseDaoImplTest {
+public class RoundDaoDBTest {
 
     @Autowired
     GameDao gameDao;

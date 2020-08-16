@@ -8,9 +8,8 @@ package com.aspire.crackthecodeapi.controller;
 import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.models.Round;
 import com.aspire.crackthecodeapi.service.ServiceLayer;
-import java.util.HashSet;
+import com.aspire.crackthecodeapi.service.util.Util;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +30,6 @@ public class Controller {
     @Autowired
     private ServiceLayer service;
 
-    private static final String GAME_IN_PROGRESS = "in-Progress";
-    private static final String FINISHED_GAME = "finished";
-
     @RequestMapping(value = "/begin", method = RequestMethod.POST)
     public ResponseEntity createGame() {
 
@@ -47,7 +43,7 @@ public class Controller {
         //set answer
         game.setAnswer(answer);
         //set status
-        game.setStatus(GAME_IN_PROGRESS);
+        game.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
 
         //create game
         Game createdGame = service.createGame(game);
@@ -69,7 +65,7 @@ public class Controller {
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
         //check check if values are unique or guess length or contains alphabet
-        if (game.getGuess() == null || !(isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
+        if (game.getGuess() == null || !(Util.isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
 
             Error error = new Error();
             error.setMessage("guess must be a 4 digit unique number.");
@@ -89,12 +85,12 @@ public class Controller {
 
                 response = new ResponseEntity(error, HttpStatus.OK);
                 //check if status has been set to finished and send result to client
-            } else if (currentGame.getStatus().equals(FINISHED_GAME)) {
+            } else if (currentGame.getStatus().equals(Util.getGAME_STATUS_FINISHED())) {
                 //game was won
 
                 response = new ResponseEntity(currentGame, HttpStatus.OK);
 
-            } else if (currentGame.getStatus().equals(GAME_IN_PROGRESS)) {
+            } else if (currentGame.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS())) {
 
                 //lost try again
                 response = new ResponseEntity(currentGame, HttpStatus.OK);
@@ -149,18 +145,6 @@ public class Controller {
         }
 
         return response;
-    }
-
-    private static boolean isUnique(String input) { // Create a Set to insert characters
-        Set<Character> set = new HashSet<>();
-        // get all characters form String
-        char[] characters = input.toCharArray();
-        for (Character c : characters) {
-            if (!set.add(c)) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

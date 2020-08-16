@@ -20,20 +20,20 @@ import org.springframework.stereotype.Repository;
  * @author louie
  */
 @Repository
-@Profile("testing")
-public class RoundDatabaseDaoImpl implements RoundDao {
+@Profile("database")
+public class RoundDaoDB implements RoundDao {
 
     @Autowired
     private JdbcTemplate jdbc;
 
     @Override
-    public void createRound(int roundNumber, int gameId) {
+    public boolean createRound(int roundNumber, int gameId) {
 
         final String INSERT_ROUND = "INSERT INTO round (roundNumber, game_gameId) VALUES(?,?)";
 
-        jdbc.update(INSERT_ROUND,
+        return jdbc.update(INSERT_ROUND,
                 roundNumber,
-                gameId);
+                gameId) > 0;
     }
 
     @Override
@@ -58,10 +58,10 @@ public class RoundDatabaseDaoImpl implements RoundDao {
     }
 
     @Override
-    public void addRound(Round round, int roundNumber, int gameId) {
+    public boolean addRound(Round round, int roundNumber, int gameId) {
 
         final String ADD_ROUND = "INSERT INTO round (roundNumber,guessTime, partial, exact, game_gameId ) VALUES(?,?,?,?,?);";
-        jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId);
+        return jdbc.update(ADD_ROUND, roundNumber, round.getTime(), round.getPartial(), round.getExact(), gameId) > 0;
     }
 
     @Override
@@ -76,10 +76,10 @@ public class RoundDatabaseDaoImpl implements RoundDao {
     }
 
     @Override
-    public void deleteRoundByGameId(int gameId) {
+    public boolean deleteRoundByGameId(int gameId) {
         final String DELETE_ROUND = "DELETE FROM round "
                 + "WHERE game_gameId = ?";
-        jdbc.update(DELETE_ROUND, gameId);
+        return jdbc.update(DELETE_ROUND, gameId) > 0;
     }
 
     @Override
