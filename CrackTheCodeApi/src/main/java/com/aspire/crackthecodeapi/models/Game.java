@@ -97,4 +97,9 @@ public class Game {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Game{" + "gameId=" + gameId + ", guess=" + guess + ", answer=" + answer + ", status=" + status + '}';
+    }
+
 }

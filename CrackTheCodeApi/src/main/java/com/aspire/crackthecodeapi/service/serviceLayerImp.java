@@ -86,7 +86,7 @@ public class serviceLayerImp implements ServiceLayer {
     @Override
     public List<RoundResponse> getAllRoundsByGame(int id) {
 
-        List<Round> rounds = roundDb.getAllRoundsByGame(id);
+        List<Round> rounds = roundDb.getAllRoundsByGameId(id);
 
         List<Round> sortedRounds = rounds.stream().sorted().collect(Collectors.toList());
 
@@ -140,7 +140,7 @@ public class serviceLayerImp implements ServiceLayer {
         final String answer = existingGame.getAnswer();
 
         //getcurrent round played
-        final int currentRound = roundDb.getRoundNumber(existingGame.getGameId());
+        final int currentRound = roundDb.getRoundNumberByGameId(existingGame.getGameId());
 
         //current round
         Round round = null;

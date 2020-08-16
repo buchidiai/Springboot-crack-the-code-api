@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `CrackTheCodeDBTest`.`round` (
   INDEX `fk_Round_game_idx` (`game_gameId` ASC) VISIBLE,
   CONSTRAINT `fk_Round_game`
     FOREIGN KEY (`game_gameId`)
-    REFERENCES `CrackTheCodeDB`.`game` (`gameId`)
+    REFERENCES `CrackTheCodeDBTest`.`game` (`gameId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

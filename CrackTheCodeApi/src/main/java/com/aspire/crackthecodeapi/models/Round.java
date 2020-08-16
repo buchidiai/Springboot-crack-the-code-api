@@ -75,8 +75,6 @@ public class Round implements Comparable<Round> {
 
     public void setTime(LocalDateTime time) {
 
-        System.out.println("time " + time);
-
         this.time = time == null ? null : time;
     }
 

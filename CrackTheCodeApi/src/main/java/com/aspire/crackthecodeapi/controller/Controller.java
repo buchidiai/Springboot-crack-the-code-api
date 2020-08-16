@@ -69,12 +69,12 @@ public class Controller {
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
         //check check if values are unique or guess length or contains alphabet
-        if (!(isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
+        if (game.getGuess() == null || !(isUnique(game.getGuess())) || game.getGuess().length() != 4 || !game.getGuess().matches("[0-9]+")) {
 
             Error error = new Error();
             error.setMessage("guess must be a 4 digit unique number.");
 
-            response = new ResponseEntity(error, HttpStatus.OK);
+            response = new ResponseEntity(error, HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
 
             //calculate round

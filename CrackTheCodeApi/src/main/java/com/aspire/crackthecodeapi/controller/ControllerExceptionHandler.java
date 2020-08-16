@@ -37,7 +37,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public final ResponseEntity<Error> handleResultNotFoundException(EmptyResultDataAccessException ex, WebRequest request) {
 
-        final String MESSAGE = "Game Not Found";
+        final String MESSAGE = "Resource Not Found";
 
         Error err = new Error();
         err.setMessage(MESSAGE);

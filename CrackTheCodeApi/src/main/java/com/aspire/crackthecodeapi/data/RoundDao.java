@@ -16,14 +16,16 @@ public interface RoundDao {
 
     void createRound(int roundNumber, int gameId);
 
-    void deleteGame(int id);
+    void deleteRoundByGameId(int id);
 
-    Round getRound(int gameId);
+    Round getRoundByGameId(int gameId);
 
     void addRound(Round round, int roundNumber, int gameId);
 
-    int getRoundNumber(int gameId);
+    int getRoundNumberByGameId(int gameId);
 
-    List<Round> getAllRoundsByGame(int id);
+    List<Round> getAllRoundsByGameId(int id);
+
+    List<Round> getAllRounds();
 
 }

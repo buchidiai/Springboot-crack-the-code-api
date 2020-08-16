@@ -71,17 +71,34 @@ public class GameDatabaseDaoImplTest {
     }
 
     @Test
+    public void testAddGameAnswer() {
+        //create new game object
+        Game game = new Game();
+        //set answer
+        game.setAnswer("1234");
+        //set status
+        game.setStatus(GAME_IN_PROGRESS);
+
+        Game createdGame = gameDao.createGame(game);
+
+        assertEquals(game.getAnswer(), createdGame.getAnswer());
+    }
+
+    @Test
     public void testGetAllGames() {
+        //create new game object
         Game game = new Game();
         game.setAnswer("1234");
         game.setStatus(GAME_IN_PROGRESS);
         Game createdGame = gameDao.createGame(game);
 
+        //create new game object
         Game game1 = new Game();
         game1.setAnswer("5678");
         game1.setStatus(GAME_IN_PROGRESS);
         Game createdGame1 = gameDao.createGame(game1);
 
+        //get all games
         List<Game> games = gameDao.getAllGames();
 
         assertEquals(2, games.size());
@@ -91,15 +108,18 @@ public class GameDatabaseDaoImplTest {
 
     @Test
     public void testfindGameById() {
+        //create new game object
         Game game = new Game();
         game.setAnswer("1234");
         game.setStatus(GAME_IN_PROGRESS);
         Game createdGame = gameDao.createGame(game);
-
+        //get all games
         List<Game> games = gameDao.getAllGames();
 
+        //get game added ~> its in 1st index
         Game onlyGame = games.get(0);
 
+        //get only game by id
         Game retrievedGame = gameDao.findGamebyId(onlyGame.getGameId());
 
         assertEquals(1, games.size());
@@ -111,10 +131,12 @@ public class GameDatabaseDaoImplTest {
 
     @Test
     public void testupdateGame() {
+
+        //create new game object
         Game game = new Game();
         game.setAnswer("1234");
         game.setStatus(GAME_IN_PROGRESS);
-
+        //create game
         Game createdGame = gameDao.createGame(game);
 
         //update game field
@@ -123,7 +145,7 @@ public class GameDatabaseDaoImplTest {
 
         //save to db
         gameDao.updateGame(createdGame);
-
+        //get updated game from db
         Game updatedGame = gameDao.findGamebyId(createdGame.getGameId());
 
         assertEquals(createdGame.getStatus(), updatedGame.getStatus());

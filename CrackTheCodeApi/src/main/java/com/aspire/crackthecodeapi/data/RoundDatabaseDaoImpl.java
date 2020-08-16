@@ -28,6 +28,7 @@ public class RoundDatabaseDaoImpl implements RoundDao {
 
     @Override
     public void createRound(int roundNumber, int gameId) {
+
         final String INSERT_ROUND = "INSERT INTO round (roundNumber, game_gameId) VALUES(?,?)";
 
         jdbc.update(INSERT_ROUND,
@@ -36,7 +37,7 @@ public class RoundDatabaseDaoImpl implements RoundDao {
     }
 
     @Override
-    public int getRoundNumber(int gameId) {
+    public int getRoundNumberByGameId(int gameId) {
 
         final String SELECT_FROM_ROUND_TABLE = "SELECT MAX(RoundNumber) FROM round WHERE game_gameId = ?";
 
@@ -46,11 +47,11 @@ public class RoundDatabaseDaoImpl implements RoundDao {
     }
 
     @Override
-    public List<Round> getAllRoundsByGame(int id) {
+    public List<Round> getAllRoundsByGameId(int gameId) {
 
         final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round WHERE game_gameId = ?";
 
-        List<Round> roundsByGameId = jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper(), id);
+        List<Round> roundsByGameId = jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper(), gameId);
 
         return roundsByGameId;
 
@@ -64,19 +65,30 @@ public class RoundDatabaseDaoImpl implements RoundDao {
     }
 
     @Override
-    public Round getRound(int gameId) {
+    public Round getRoundByGameId(int gameId) {
 
         final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round WHERE game_gameId = ?";
 
-        return jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new RoundMapper(), gameId);
+        Round foundRound = jdbc.queryForObject(SELECT_FROM_ROUND_TABLE, new RoundMapper(), gameId);
+
+        return foundRound;
 
     }
 
     @Override
-    public void deleteGame(int id) {
+    public void deleteRoundByGameId(int gameId) {
         final String DELETE_ROUND = "DELETE FROM round "
                 + "WHERE game_gameId = ?";
-        jdbc.update(DELETE_ROUND, id);
+        jdbc.update(DELETE_ROUND, gameId);
+    }
+
+    @Override
+    public List<Round> getAllRounds() {
+        final String SELECT_FROM_ROUND_TABLE = "SELECT * FROM round;";
+
+        List<Round> rounds = jdbc.query(SELECT_FROM_ROUND_TABLE, new RoundMapper());
+
+        return rounds;
     }
 
     private static final class RoundMapper implements RowMapper<Round> {
