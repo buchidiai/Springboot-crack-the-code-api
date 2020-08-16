@@ -7,6 +7,7 @@ package com.aspire.crackthecodeapi.data;
 
 import com.aspire.crackthecodeapi.TestApplicationConfiguration;
 import com.aspire.crackthecodeapi.models.Game;
+import com.aspire.crackthecodeapi.models.Round;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,15 +30,24 @@ public class GameDatabaseDaoImplTest {
     @Autowired
     GameDao gameDao;
 
+    @Autowired
+    RoundDao roundDao;
+
     private static final String GAME_IN_PROGRESS = "in-Progress";
     private static final String FINISHED_GAME = "finished";
 
     @Before
     public void setUp() {
 
+        //delete all rounds
+        List<Round> rounds = roundDao.getAllRounds();
+        rounds.forEach(round -> {
+            roundDao.deleteRoundByGameId(round.getGameId());
+        });
+
         List<Game> games = gameDao.getAllGames();
         for (Game game : games) {
-            gameDao.deleteGame(game.getGameId());
+            gameDao.deleteGameByGameId(game.getGameId());
         }
 
     }
@@ -120,7 +130,7 @@ public class GameDatabaseDaoImplTest {
         Game onlyGame = games.get(0);
 
         //get only game by id
-        Game retrievedGame = gameDao.findGamebyId(onlyGame.getGameId());
+        Game retrievedGame = gameDao.findGameByGameId(onlyGame.getGameId());
 
         assertEquals(1, games.size());
 
@@ -146,7 +156,7 @@ public class GameDatabaseDaoImplTest {
         //save to db
         gameDao.updateGame(createdGame);
         //get updated game from db
-        Game updatedGame = gameDao.findGamebyId(createdGame.getGameId());
+        Game updatedGame = gameDao.findGameByGameId(createdGame.getGameId());
 
         assertEquals(createdGame.getStatus(), updatedGame.getStatus());
         assertNotNull(updatedGame.getAnswer());
@@ -161,7 +171,7 @@ public class GameDatabaseDaoImplTest {
 
         Game createdGame = gameDao.createGame(game);
 
-        gameDao.deleteGame(createdGame.getGameId());
+        gameDao.deleteGameByGameId(createdGame.getGameId());
 
         List<Game> games = gameDao.getAllGames();
 

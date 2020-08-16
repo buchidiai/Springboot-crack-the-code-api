@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -32,7 +31,6 @@ public class GameDatabaseDaoImpl implements GameDao {
     private JdbcTemplate jdbc;
 
     @Override
-    @Transactional
     public Game createGame(Game game) {
 
         final String INSERT_GAME = "INSERT INTO game(answer, status) VALUES(?,?)";
@@ -54,7 +52,7 @@ public class GameDatabaseDaoImpl implements GameDao {
     }
 
     @Override
-    public Game findGamebyId(int id) {
+    public Game findGameByGameId(int id) {
 
         final String GET_GAME_BY_ID = "SELECT gameId,guess,answer,status "
                 + "FROM game WHERE gameId = ?;";
@@ -83,7 +81,7 @@ public class GameDatabaseDaoImpl implements GameDao {
     }
 
     @Override
-    public void deleteGame(int id) {
+    public void deleteGameByGameId(int id) {
         final String DELETE_GAME = "DELETE FROM game "
                 + "WHERE gameId = ?";
         jdbc.update(DELETE_GAME, id);

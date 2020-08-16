@@ -16,9 +16,9 @@ public interface GameDao {
 
     Game createGame(Game game);
 
-    void deleteGame(int id);
+    void deleteGameByGameId(int id);
 
-    Game findGamebyId(int id);
+    Game findGameByGameId(int id);
 
     void updateGame(Game game);
 

@@ -68,7 +68,7 @@ public class serviceLayerImp implements ServiceLayer {
     @Override
     public Game findGamebyId(int id) {
 
-        return gameDb.findGamebyId(id);
+        return gameDb.findGameByGameId(id);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class serviceLayerImp implements ServiceLayer {
     @Override
     public Game getGame(int gameId) {
 
-        Game g = gameDb.findGamebyId(gameId);
+        Game g = gameDb.findGameByGameId(gameId);
 
         if (g.getStatus().equals(GAME_IN_PROGRESS)) {
             g.setAnswer("N/A");
@@ -131,7 +131,7 @@ public class serviceLayerImp implements ServiceLayer {
     public GameResponse calculatedResult(Game game) {
 
         //game found
-        final Game existingGame = gameDb.findGamebyId(game.getGameId());
+        final Game existingGame = gameDb.findGameByGameId(game.getGameId());
 
         //user guess
         final String guess = game.getGuess();

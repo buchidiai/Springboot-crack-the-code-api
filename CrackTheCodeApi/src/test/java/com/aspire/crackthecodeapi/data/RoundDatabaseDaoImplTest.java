@@ -52,7 +52,7 @@ public class RoundDatabaseDaoImplTest {
         //delete all games
         List<Game> games = gameDao.getAllGames();
         games.forEach(game -> {
-            gameDao.deleteGame(game.getGameId());
+            gameDao.deleteGameByGameId(game.getGameId());
         });
 
         //create new game object
@@ -78,8 +78,6 @@ public class RoundDatabaseDaoImplTest {
         round.setRoundNumber(1);
         round.setStatus(GAME_IN_PROGRESS);
 
-//        roundDao.addRound(round, round.getRoundNumber(), game.getGameId());
-//        round = roundDao.getRound(game.getGameId());
         //play round 2
         //create round object
         round2 = new Round();
@@ -93,8 +91,6 @@ public class RoundDatabaseDaoImplTest {
         round2.setRoundNumber(2);
         round2.setStatus(FINISHED_GAME);
 
-//        roundDao.addRound(round2, round2.getRoundNumber(), game.getGameId());
-//        round2 = roundDao.getRound(game.getGameId());
     }
 
     @Test
