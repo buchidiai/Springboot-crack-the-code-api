@@ -32,6 +32,11 @@ public class serviceLayerImp implements ServiceLayer {
     @Autowired
     private RoundDao roundDb;
 
+    public serviceLayerImp(GameDao gameDb, RoundDao roundDb) {
+        this.gameDb = gameDb;
+        this.roundDb = roundDb;
+    }
+
     @Override
     public String generateAnswer() {
 
@@ -110,8 +115,6 @@ public class serviceLayerImp implements ServiceLayer {
         //game found
         final Game existingGame = gameDb.findGameByGameId(game.getGameId());
 
-        System.out.println("existingGame " + existingGame.toString());
-
         //user guess
         final String guess = game.getGuess();
 
@@ -167,8 +170,6 @@ public class serviceLayerImp implements ServiceLayer {
                 for (int i = 0; i < answer.length(); i++) {
 
                     for (int j = 0; j < answer.length(); j++) {
-
-                        System.out.println("answerArray[i] " + answerArray[i] + " , " + guessArray[j]);
 
                         if (answerArray[i] == guessArray[j]) {
 

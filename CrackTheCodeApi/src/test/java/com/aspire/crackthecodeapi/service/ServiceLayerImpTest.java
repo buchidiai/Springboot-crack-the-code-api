@@ -5,10 +5,11 @@
  */
 package com.aspire.crackthecodeapi.service;
 
-import com.aspire.crackthecodeapi.TestApplicationConfiguration;
 import com.aspire.crackthecodeapi.controller.GameResponse;
 import com.aspire.crackthecodeapi.data.GameDao;
+import com.aspire.crackthecodeapi.data.GameDaoDBStubImpl;
 import com.aspire.crackthecodeapi.data.RoundDao;
+import com.aspire.crackthecodeapi.data.RoundDaoDBStubImpl;
 import com.aspire.crackthecodeapi.models.Game;
 import com.aspire.crackthecodeapi.service.util.Util;
 import java.util.HashSet;
@@ -17,27 +18,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  *
  * @author louie
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = TestApplicationConfiguration.class)
 public class ServiceLayerImpTest {
 
-    @Autowired
     private ServiceLayer service;
+    private GameDao gameDao;
+    private RoundDao roundDao;
 
-    @Autowired
-    GameDao gameDao;
+    public ServiceLayerImpTest() {
 
-    @Autowired
-    RoundDao roundDao;
+        this.gameDao = new GameDaoDBStubImpl();
+        this.roundDao = new RoundDaoDBStubImpl();
+        this.service = new serviceLayerImp(gameDao, roundDao);
+    }
 
     private Game game = null;
 
@@ -53,13 +50,31 @@ public class ServiceLayerImpTest {
     }
 
     @Test
-    public void testCalculateResult() throws Exception {
+    public void testCalculateResultingBadLooss() throws Exception {
+
+        game.setGuess("6789");
 
         GameResponse gameResponse = service.calculatedResult(game);
 
-        System.out.println("gameResponse " + gameResponse.toString());
+        assertTrue(gameResponse.getResult().equals("e:0:p:0"));
+    }
+
+    @Test
+    public void testCalculateResultingPartialWin() throws Exception {
+
+        GameResponse gameResponse = service.calculatedResult(game);
 
         assertTrue(gameResponse.getResult().equals("e:3:p:0"));
+    }
+
+    @Test
+    public void testCalculateResultingExactWin() throws Exception {
+
+        game.setGuess("1234");
+
+        GameResponse gameResponse = service.calculatedResult(game);
+
+        assertTrue(gameResponse.getResult().equals("e:4:p:0"));
     }
 
     @Test

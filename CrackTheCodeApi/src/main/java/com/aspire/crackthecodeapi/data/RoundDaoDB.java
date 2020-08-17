@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
  * @author louie
  */
 @Repository
-@Profile("testing")
+@Profile("database")
 public class RoundDaoDB implements RoundDao {
 
     @Autowired
