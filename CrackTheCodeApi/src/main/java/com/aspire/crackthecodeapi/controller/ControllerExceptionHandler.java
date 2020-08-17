@@ -37,7 +37,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public final ResponseEntity<Error> handleResultNotFoundException(EmptyResultDataAccessException ex, WebRequest request) {
 
-        final String MESSAGE = "Resource Not Found";
+        final String MESSAGE = "Resource Not Found.";
 
         Error err = new Error();
         err.setMessage(MESSAGE);
@@ -47,10 +47,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     public final ResponseEntity<Error> handleIncorrectSizeException(IncorrectResultSizeDataAccessException ex, WebRequest request) {
 
-        final String MESSAGE = "Something went wrong, please try again";
+        final String MESSAGE = "Unknown error, please contact support.";
 
         Error err = new Error();
         err.setMessage(MESSAGE);
         return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
+
 }

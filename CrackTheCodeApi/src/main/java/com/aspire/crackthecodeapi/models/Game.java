@@ -28,6 +28,13 @@ public class Game {
     public Game() {
     }
 
+    public Game(Game game) {
+        this.gameId = game.gameId;
+        this.guess = game.guess;
+        this.answer = game.answer;
+        this.status = game.status;
+    }
+
     public int getGameId() {
         return gameId;
     }
@@ -49,7 +56,9 @@ public class Game {
     }
 
     public void setAnswer(String answer) {
+
         this.answer = answer;
+
     }
 
     public String getStatus() {

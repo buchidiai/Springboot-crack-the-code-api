@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author louie
  */
 @SpringBootApplication
+
 public class App {
 
     public static void main(String[] args) {

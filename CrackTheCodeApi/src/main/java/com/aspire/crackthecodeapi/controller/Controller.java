@@ -123,7 +123,7 @@ public class Controller {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
-        Game foundGame = service.getGame(gameId);
+        Game foundGame = service.findGameByGameId(gameId);
 
         if (foundGame != null) {
             response = new ResponseEntity(foundGame, HttpStatus.OK);
@@ -136,7 +136,7 @@ public class Controller {
 
         ResponseEntity response = new ResponseEntity(null, HttpStatus.NO_CONTENT);
 
-        List<RoundResponse> allRounds = service.getAllRoundsByGame(gameId);
+        List<RoundResponse> allRounds = service.getAllRoundsByGameId(gameId);
 
         if (allRounds != null) {
 

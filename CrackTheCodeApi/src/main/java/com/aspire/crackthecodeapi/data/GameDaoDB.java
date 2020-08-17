@@ -24,7 +24,7 @@ import org.springframework.stereotype.Repository;
  * @author louie
  */
 @Repository
-@Profile("database")
+@Profile("testing")
 public class GameDaoDB implements GameDao {
 
     @Autowired

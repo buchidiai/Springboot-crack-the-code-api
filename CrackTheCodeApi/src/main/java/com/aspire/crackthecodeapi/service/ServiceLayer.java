@@ -22,12 +22,10 @@ public interface ServiceLayer {
 
     Game createGame(Game game);
 
-    Game getGame(int gameId);
-
-    Game findGamebyId(int id);
+    Game findGameByGameId(int gameId);
 
     List<Game> getAllGames();
 
-    List<RoundResponse> getAllRoundsByGame(int id);
+    List<RoundResponse> getAllRoundsByGameId(int id);
 
 }

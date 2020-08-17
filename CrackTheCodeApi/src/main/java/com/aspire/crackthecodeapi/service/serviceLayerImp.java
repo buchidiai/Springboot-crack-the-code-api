@@ -62,14 +62,6 @@ public class serviceLayerImp implements ServiceLayer {
     }
 
     @Override
-    public Game findGamebyId(int id) {
-
-        System.out.println("in here w id " + id);
-
-        return gameDb.findGameByGameId(id);
-    }
-
-    @Override
     public List<Game> getAllGames() {
 
         List<Game> games = gameDb.getAllGames();
@@ -82,7 +74,7 @@ public class serviceLayerImp implements ServiceLayer {
     }
 
     @Override
-    public List<RoundResponse> getAllRoundsByGame(int id) {
+    public List<RoundResponse> getAllRoundsByGameId(int id) {
 
         List<Round> rounds = roundDb.getAllRoundsByGameId(id);
 
@@ -113,23 +105,12 @@ public class serviceLayerImp implements ServiceLayer {
     }
 
     @Override
-    public Game getGame(int gameId) {
-
-        Game g = gameDb.findGameByGameId(gameId);
-
-        if (g.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS())) {
-            g.setAnswer("N/A");
-
-        }
-
-        return g;
-    }
-
-    @Override
     public GameResponse calculatedResult(Game game) {
 
         //game found
         final Game existingGame = gameDb.findGameByGameId(game.getGameId());
+
+        System.out.println("existingGame " + existingGame.toString());
 
         //user guess
         final String guess = game.getGuess();
@@ -173,7 +154,7 @@ public class serviceLayerImp implements ServiceLayer {
                 //update round table
                 roundDb.addRound(round, currentRound + 1, game.getGameId());
 
-                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, round.getTime(), "e:" + round.getExact() + ":p:" + round.getPartial(), Util.getGAME_STATUS_FINISHED(), "Congrats!! You Cracked the Code");
+                response = new GameResponse(round.getRoundNumber(), game.getGameId(), guess, round.getTime(), "e:" + round.getExact() + ":p:" + round.getPartial(), round.getStatus(), "Congrats!! You Cracked the Code");
 
             } else {
 
@@ -187,23 +168,33 @@ public class serviceLayerImp implements ServiceLayer {
 
                     for (int j = 0; j < answer.length(); j++) {
 
+                        System.out.println("answerArray[i] " + answerArray[i] + " , " + guessArray[j]);
+
                         if (answerArray[i] == guessArray[j]) {
 
                             if ((i == 0 && j == 0) && answerArray[i] == guessArray[j]) {
+
                                 ex++;
                             } else if ((i == 0 && j > 0) && answerArray[i] == guessArray[j]) {
+
                                 p++;
                             } else if ((i == 1 && j == 1) && answerArray[i] == guessArray[j]) {
+
                                 ex++;
                             } else if (i == 1 && j > 0 && answerArray[i] == guessArray[j]) {
+
                                 p++;
                             } else if (i == 2 && j == 2 && answerArray[i] == guessArray[j]) {
+
                                 ex++;
                             } else if (i == 2 && j > 0 && answerArray[i] == guessArray[j]) {
+
                                 p++;
                             } else if (i == 3 && j == 3 && answerArray[i] == guessArray[j]) {
+
                                 ex++;
                             } else if (i == 3 && j > 0 && answerArray[i] == guessArray[j]) {
+
                                 p++;
                             }
 
@@ -239,6 +230,17 @@ public class serviceLayerImp implements ServiceLayer {
 
         return round == null ? null : updatedGame == true ? response : null;
 
+    }
+
+    @Override
+    public Game findGameByGameId(int gameId) {
+
+        Game g = gameDb.findGameByGameId(gameId);
+
+        if (g.getStatus().equals(Util.getGAME_STATUS_IN_PROGRESS())) {
+            g.setAnswer("N/A");
+        }
+        return g;
     }
 
 }

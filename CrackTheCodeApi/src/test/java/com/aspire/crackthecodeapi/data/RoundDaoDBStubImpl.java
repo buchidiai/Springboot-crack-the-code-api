@@ -6,22 +6,22 @@
 package com.aspire.crackthecodeapi.data;
 
 import com.aspire.crackthecodeapi.models.Round;
-import java.time.LocalDateTime;
+import com.aspire.crackthecodeapi.service.util.Util;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author louie
  */
-@Profile("testing")
+//@Repository
+//@Profile("testing")
 public class RoundDaoDBStubImpl implements RoundDao {
 
     private Round onlyRound;
-    private final LocalDateTime now = LocalDateTime.now();
-    private static final String GAME_IN_PROGRESS = "in-Progress";
 
+    @Autowired
     public RoundDaoDBStubImpl() {
 
         onlyRound = new Round();
@@ -29,10 +29,10 @@ public class RoundDaoDBStubImpl implements RoundDao {
         onlyRound.setRoundId(0);
         onlyRound.setGameId(1);
         onlyRound.setRoundNumber(1);
-        onlyRound.setTime(now);
+        onlyRound.setTime(Util.getDATE_TIME());
         onlyRound.setExact(3);
         onlyRound.setPartial(0);
-        onlyRound.setStatus(GAME_IN_PROGRESS);
+        onlyRound.setStatus(Util.getGAME_STATUS_IN_PROGRESS());
     }
 
     @Override

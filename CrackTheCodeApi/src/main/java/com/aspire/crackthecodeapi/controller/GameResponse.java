@@ -87,4 +87,9 @@ public class GameResponse {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "GameResponse{" + "roundNumber=" + roundNumber + ", gameId=" + gameId + ", guess=" + guess + ", time=" + time + ", Result=" + Result + ", status=" + status + ", message=" + message + '}';
+    }
+
 }

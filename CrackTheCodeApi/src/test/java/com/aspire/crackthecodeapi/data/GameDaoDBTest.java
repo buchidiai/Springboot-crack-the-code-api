@@ -44,9 +44,9 @@ public class GameDaoDBTest {
         });
 
         List<Game> games = gameDao.getAllGames();
-        for (Game game : games) {
+        games.forEach(game -> {
             gameDao.deleteGameByGameId(game.getGameId());
-        }
+        });
 
     }
 
